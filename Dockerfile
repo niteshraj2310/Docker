@@ -108,10 +108,10 @@ RUN cd /usr/local/bin \
 	&& ln -s python3-config python-config
 
 # if this is called "PIP_VERSION", pip explodes with "ValueError: invalid truth value '<VERSION>'"
-ENV PYTHON_PIP_VERSION 20.2
+ENV PYTHON_PIP_VERSION 20.2.3
 # https://github.com/pypa/get-pip
-ENV PYTHON_GET_PIP_URL https://github.com/pypa/get-pip/raw/cb5b85a8e0c3d13ced611b97816d7490d2f1497e/get-pip.py
-ENV PYTHON_GET_PIP_SHA256 a30ff8a3446c592c6d70403a82483716e7b759e8eecba2c8d3f6ecfb34a8d6d7
+ENV PYTHON_GET_PIP_URL https://github.com/pypa/get-pip/raw/fa7dc83944936bf09a0e4cb5d5ec852c0d256599/get-pip.py
+ENV PYTHON_GET_PIP_SHA256 6e0bb0a2c2533361d7f297ed547237caf1b7507f197835974c0dd7eba998c53c
 
 RUN set -ex; \
 	\
@@ -130,7 +130,7 @@ RUN set -ex; \
 	python get-pip.py \
 		--disable-pip-version-check \
 		--no-cache-dir \
-		"pip==$PYTHON_PIP_VERSION" \
+		"pip==$PYTHON_PIP_VERSION" "wheel" \
 	; \
 	pip --version; \
 	\
