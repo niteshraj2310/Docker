@@ -1,5 +1,5 @@
 FROM ubuntu:groovy
-LABEL maintainer "Nitesh <niteshraj231@outlook.com>"
+LABEL maintainer "Alfiananda P.A <genengbendo12@gmail.com>"
 
 RUN ln -fs /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 RUN apt update && apt -y upgrade && apt install -y tzdata locales
