@@ -164,7 +164,7 @@ RUN apt-get -qq update && apt-get -qq install -y \
     git \
     libpq-dev \
     sudo \
-    megatools
+    megatools \
     jpeg 
 
 
