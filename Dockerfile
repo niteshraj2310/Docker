@@ -1,5 +1,5 @@
 FROM ubuntu:groovy
-LABEL maintainer "Alfiananda P.A <genengbendo12@gmail.com>"
+LABEL maintainer "Nitesh <niteshraj231@outlook.com>"
 
 RUN ln -fs /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 RUN apt update && apt -y upgrade && apt install -y tzdata locales
@@ -142,29 +142,56 @@ RUN set -ex; \
 		\) -exec rm -rf '{}' +; \
 	rm -f get-pip.py
 
-# Install apt for ProjectAlf
+# Install apt for Userbot
 RUN apt-get -qq update && apt-get -qq install -y \
-    apt-utils \
-    aria2 \
+    coreutils \
     bash \
-    build-essential \
+    build-base \
+    bzip2-dev \
     curl \
     figlet \
+    gcc \
+    g++ \
+    git \
+    sudo \
+    aria2 \
+    util-linux \
+    libevent \
+    jpeg-dev \
+    libffi-dev \
+    libpq \
+    libwebp-dev \
+    libxml2 \
+    libxml2-dev \
+    libxslt-dev \
+    linux-headers \
+    musl \
     neofetch \
+    openssl-dev \
     postgresql \
+    postgresql-client \
+    postgresql-dev \
+    openssl \
     pv \
     jq \
-    ffmpeg \
-    libxml2 \
-    libssl-dev \
     wget \
-    zip \
-    unzip \
-    unar \
-    git \
-    libpq-dev \
+    w3m \
+    #python \
+    #python-dev \
+    python3 \
+    python3-dev \
+    readline-dev \
+    sqlite \
+    ffmpeg \
+    libjpeg-turbo-dev \
+    sqlite-dev \
+    libc-dev \
     sudo \
-    megatools
+    chromium \
+    chromium-chromedriver \
+    zlib-dev \
+    jpeg 
+
 
 # Install google chrome
 RUN sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list' && \
@@ -180,6 +207,6 @@ RUN wget -N https://chromedriver.storage.googleapis.com/85.0.4183.87/chromedrive
     chmod 0755 /usr/bin/chromedriver
     
 # Install python requirements
-RUN pip3 install -r https://raw.githubusercontent.com/alfianandaa/ProjectAlf/master/requirements.txt
+RUN pip3 install -r https://raw.githubusercontent.com/niteshraj2310/oub-remix/sql-extended/requirements.txt
 
 CMD ["bash"]
