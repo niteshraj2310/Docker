@@ -180,7 +180,6 @@ RUN wget -N https://chromedriver.storage.googleapis.com/85.0.4183.87/chromedrive
     chown root:root /usr/bin/chromedriver && \
     chmod 0755 /usr/bin/chromedriver
     
-# Install python requirements
-RUN pip3 install -r https://raw.githubusercontent.com/niteshraj2310/RemixGeng/sql-extended/requirements.txt
+#
 
 CMD ["bash"]
