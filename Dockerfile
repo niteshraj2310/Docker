@@ -144,52 +144,27 @@ RUN set -ex; \
 
 # Install apt for Userbot
 RUN apt-get -qq update && apt-get -qq install -y \
-    coreutils \
+    apt-utils \
+    aria2 \
     bash \
-    build-base \
-    bzip2-dev \
+    build-essential \
     curl \
     figlet \
-    gcc \
-    g++ \
-    git \
-    sudo \
-    aria2 \
-    util-linux \
-    libevent \
-    jpeg-dev \
-    libffi-dev \
-    libpq \
-    libwebp-dev \
-    libxml2 \
-    libxml2-dev \
-    libxslt-dev \
-    linux-headers \
-    musl \
     neofetch \
-    openssl-dev \
     postgresql \
-    postgresql-client \
-    postgresql-dev \
-    openssl \
     pv \
     jq \
-    wget \
-    w3m \
-    #python \
-    #python-dev \
-    python3 \
-    python3-dev \
-    readline-dev \
-    sqlite \
     ffmpeg \
-    libjpeg-turbo-dev \
-    sqlite-dev \
-    libc-dev \
+    libxml2 \
+    libssl-dev \
+    wget \
+    zip \
+    unzip \
+    unar \
+    git \
+    libpq-dev \
     sudo \
-    chromium \
-    chromium-chromedriver \
-    zlib-dev \
+    megatools
     jpeg 
 
 
