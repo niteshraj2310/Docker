@@ -69,11 +69,13 @@ RUN set -ex \
 		--enable-optimizations \
 		--enable-option-checking=fatal \
 		--enable-shared \
+                --with-lto \
 		--with-system-expat \
 		--with-system-ffi \
 		--without-ensurepip \
 	&& make -j "$(nproc)" \
-		LDFLAGS="-Wl,--strip-all" \
+		EXTRA_CFLAGS="-fno-semantic-interposition" \
+		LDFLAGS="-Wl,--strip-all -fno-semantic-interposition" \
 	&& make install \
 	&& rm -rf /usr/src/python \
         \
