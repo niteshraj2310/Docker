@@ -1,7 +1,7 @@
 FROM ubuntu:focal
 LABEL maintainer "Nitesh <niteshraj231@outlook.com"
 
-# Indonesian timezone (GMT+7)	
+# Indonesian timezone (GMT+7)
 ENV TZ=Asia/Jakarta
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
