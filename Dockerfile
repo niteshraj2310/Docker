@@ -176,7 +176,6 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends \
     zlib1g-dev \
     libatlas-base-dev \
     gfortran \
-    python3-wordcloud \
     gnupg \
     megatools
 
