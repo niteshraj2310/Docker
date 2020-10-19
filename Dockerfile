@@ -2,32 +2,32 @@ FROM ubuntu:groovy
 LABEL maintainer "nitesh231 <niteshraj231@outlook.com>"
 
 RUN ln -fs /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
-RUN apt update && apt -y upgrade && apt install -y --no-install-recommends tzdata locales
+RUN apt update && apt -y upgrade && apt install -y tzdata locales
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 # ensure local python is preferred over distribution python
-ENV PATH="/root/userbot/.bin:$PATH"
+ENV PATH /usr/local/bin:$PATH
 
 # http://bugs.python.org/issue19846
 # > At the moment, setting "LANG=C" on a Linux system *fundamentally breaks Python 3*, and that's not OK.
 ENV LANG C.UTF-8
 
 # runtime dependencies
-RUN apt-get install -y --no-install-recommends \
+RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends \
 		ca-certificates \
 		netbase \
 	&& rm -rf /var/lib/apt/lists/*
 
 ENV GPG_KEY E3FF2839C048B25C084DEBE9B26995E310250568
-ENV PYTHON_VERSION 3.9.0
+ENV PYTHON_VERSION 3.8.6
 
 RUN set -ex \
 	\
 	&& savedAptMark="$(apt-mark showmanual)" \
-	&& apt-get update && apt-get install -y --no-install-recommends \
+	&& apt-get update -qq && apt-get -qq install -y --no-install-recommends \
 		dpkg-dev \
 		gcc \
 		libbluetooth-dev \
@@ -69,7 +69,7 @@ RUN set -ex \
 		--enable-optimizations \
 		--enable-option-checking=fatal \
 		--enable-shared \
-		--with-lto \
+                --with-lto \
 		--with-system-expat \
 		--with-system-ffi \
 		--without-ensurepip \
@@ -78,13 +78,14 @@ RUN set -ex \
 		LDFLAGS="-Wl,--strip-all -fno-semantic-interposition" \
 	&& make install \
 	&& rm -rf /usr/src/python \
-	\
+        \
 	&& find /usr/local -depth \
 		\( \
 			\( -type d -a \( -name test -o -name tests -o -name idle_test \) \) \
-			-o \( -type f -a \( -name '*.pyc' -o -name '*.pyo' -o -name '*.a' \) \) \
+			-o \
+			\( -type f -a \( -name '*.pyc' -o -name '*.pyo' \) \) \
 		\) -exec rm -rf '{}' + \
-	\	
+	\
 	&& ldconfig \
 	\
 	&& apt-mark auto '.*' > /dev/null \
@@ -96,7 +97,7 @@ RUN set -ex \
 		| cut -d: -f1 \
 		| sort -u \
 		| xargs -r apt-mark manual \
-	&& apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+	&& apt-get -qq purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
 	&& rm -rf /var/lib/apt/lists/* \
 	\
 	&& python3 --version
@@ -117,21 +118,21 @@ ENV PYTHON_GET_PIP_SHA256 2250ab0a7e70f6fd22b955493f7f5cf1ea53e70b584a84a3257364
 RUN set -ex; \
 	\
 	savedAptMark="$(apt-mark showmanual)"; \
-	apt-get update; \
-	apt-get install -y --no-install-recommends wget; \
+	apt-get -qq update; \
+	apt-get -qq install -y --no-install-recommends wget; \
 	\
 	wget -O get-pip.py "$PYTHON_GET_PIP_URL"; \
 	echo "$PYTHON_GET_PIP_SHA256 *get-pip.py" | sha256sum --check --strict -; \
 	\
 	apt-mark auto '.*' > /dev/null; \
 	[ -z "$savedAptMark" ] || apt-mark manual $savedAptMark; \
-	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
+	apt-get -qq purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
 	rm -rf /var/lib/apt/lists/*; \
 	\
 	python get-pip.py \
 		--disable-pip-version-check \
 		--no-cache-dir \
-		"pip==$PYTHON_PIP_VERSION" "wheel" \
+		"pip==$PYTHON_PIP_VERSION" \
 	; \
 	pip --version; \
 	\
@@ -143,42 +144,30 @@ RUN set -ex; \
 		\) -exec rm -rf '{}' +; \
 	rm -f get-pip.py
 
-# Install apt for Userbot
-RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends \
+# Install apt for UserBot
+RUN apt-get -qq update && apt-get -qq install -y \
     apt-utils \
     aria2 \
     bash \
     build-essential \
     curl \
     figlet \
-    imagemagick \
     neofetch \
     postgresql \
     pv \
-    python3 \
-    python3-dev \
-    python3-pip \
     jq \
     ffmpeg \
     libxml2 \
-    mediainfo \
-    gnupg \
-    libxml2-dev \
     libssl-dev \
-    libxslt-dev \
     wget \
     zip \
     unzip \
     unar \
     git \
+    mediainfo \
     libpq-dev \
     sudo \
-    zlib1g-dev \
-    libatlas-base-dev \
-    gfortran \
-    gnupg \
     megatools
-
 
 # Install google chrome
 RUN sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list' && \
@@ -194,9 +183,6 @@ RUN wget -N https://chromedriver.storage.googleapis.com/86.0.4240.22/chromedrive
     chmod 0755 /usr/bin/chromedriver
     
 # Install python requirements
-RUN pip3 install --no-cache-dir -r https://raw.githubusercontent.com/niteshraj2310/RemixGeng/sql-extended/requirements.txt --use-feature=2020-resolver
-
-# Clean Up
-RUN apt-get clean --dry-run
+RUN pip3 install -r https://raw.githubusercontent.com/niteshraj2310/RemixGeng/sql-extended/requirements.txt
 
 CMD ["bash"]
