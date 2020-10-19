@@ -1,0 +1,19 @@
+name: Docker Build
+on:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: '0 0 * * *' # Auto build Docker every midnight
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build and Publish to Dockerhub
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: ${{ secrets.DOCKER }}
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        tags: ${{ secrets.TAGS }}
