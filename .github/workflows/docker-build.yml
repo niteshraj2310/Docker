@@ -4,7 +4,7 @@ on:
     branches:
       - master
   schedule:
-    - cron: '0 0 * * *' # Auto build Docker every midnight
+    - cron: '0 0 * * *'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -13,7 +13,7 @@ jobs:
     - name: Build and Publish to Dockerhub
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
-        name: ${{ secrets.DOCKER }}
+        name: nitesh231/hirsute-hippo
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        tags: ${{ secrets.TAGS }}
+        tags: latest
