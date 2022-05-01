@@ -1,4 +1,4 @@
-FROM nitesh231/hirsute-hippo:latest
+FROM ubuntu:latest
 LABEL maintainer "nitesh231 <niteshraj231@outlook.com>"
 
 RUN ln -fs /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
@@ -99,7 +99,7 @@ RUN set -ex \
 	&& apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
 	&& rm -rf /var/lib/apt/lists/* \
 	\
-	&& python3 --version
+	&& python --version
 
 # make some useful symlinks that are expected to exist
 RUN cd /usr/local/bin \
