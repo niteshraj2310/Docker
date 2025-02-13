@@ -1,7 +1,7 @@
 FROM ubuntu:latest
 LABEL maintainer "nitesh231 <niteshraj231@outlook.com>"
 
-RUN ln -fs /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
+RUN ln -fs /usr/share/zoneinfo/Asia/Kolkata /etc/localtime
 RUN apt update && apt -y upgrade && apt install -y --no-install-recommends tzdata locales
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
@@ -52,7 +52,7 @@ RUN set -ex \
     && wget -O python.tar.xz "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz" \
     && wget -O python.tar.xz.asc "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz.asc" \
     && export GNUPGHOME="$(mktemp -d)" \
-    && gpg --batch --keyserver hkps://keys.openpgp.org --recv-keys "$GPG_KEY" \
+    && gpg --batch --keyserver hkps://keys.openpgp.org --recv-keys CFDCA245B1043CF2A5F97865FFE87404168BD847 \
     && gpg --batch --verify python.tar.xz.asc python.tar.xz \
     && { command -v gpgconf > /dev/null && gpgconf --kill all || :; } \
     && rm -rf "$GNUPGHOME" python.tar.xz.asc \
