@@ -17,12 +17,12 @@ ENV LANG C.UTF-8
 
 # runtime dependencies
 RUN apt-get install -y --no-install-recommends \
-		ca-certificates \
-		netbase \
-	&& rm -rf /var/lib/apt/lists/*
+        ca-certificates \
+        netbase \
+    && rm -rf /var/lib/apt/lists/*
 
 ENV GPG_KEY E3FF2839C048B25C084DEBE9B26995E310250568
-ENV PYTHON_VERSION 3.9.11
+ENV PYTHON_VERSION 3.11.5
 
 RUN set -ex \
     && savedAptMark="$(apt-mark showmanual)" \
@@ -30,6 +30,7 @@ RUN set -ex \
     && apt-get install -y --no-install-recommends \
         dpkg-dev \
         gcc \
+        g++ \
         libbluetooth-dev \
         libbz2-dev \
         libc6-dev \
@@ -96,45 +97,45 @@ RUN set -ex \
 
 # make some useful symlinks that are expected to exist
 RUN cd /usr/local/bin \
-	&& ln -s idle3 idle \
-	&& ln -s pydoc3 pydoc \
-	&& ln -s python3 python \
-	&& ln -s python3-config python-config
+    && ln -s idle3 idle \
+    && ln -s pydoc3 pydoc \
+    && ln -s python3 python \
+    && ln -s python3-config python-config
 
 # if this is called "PIP_VERSION", pip explodes with "ValueError: invalid truth value '<VERSION>'"
-ENV PYTHON_PIP_VERSION 22.0.4
+ENV PYTHON_PIP_VERSION 23.2.1
 # https://github.com/pypa/get-pip
 ENV PYTHON_GET_PIP_URL https://github.com/pypa/get-pip/raw/38e54e5de07c66e875c11a1ebbdb938854625dd8/public/get-pip.py
 ENV PYTHON_GET_PIP_SHA256 e235c437e5c7d7524fbce3880ca39b917a73dc565e0c813465b7a7a329bb279a
 
 RUN set -ex; \
-	\
-	savedAptMark="$(apt-mark showmanual)"; \
-	apt-get update; \
-	apt-get install -y --no-install-recommends wget; \
-	\
-	wget -O get-pip.py "$PYTHON_GET_PIP_URL"; \
-	echo "$PYTHON_GET_PIP_SHA256 *get-pip.py" | sha256sum --check --strict -; \
-	\
-	apt-mark auto '.*' > /dev/null; \
-	[ -z "$savedAptMark" ] || apt-mark manual $savedAptMark; \
-	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
-	rm -rf /var/lib/apt/lists/*; \
-	\
-	python get-pip.py \
-		--disable-pip-version-check \
-		--no-cache-dir \
-		"pip==$PYTHON_PIP_VERSION" \
-	; \
-	pip --version; \
-	\
-	find /usr/local -depth \
-		\( \
-			\( -type d -a \( -name test -o -name tests -o -name idle_test \) \) \
-			-o \
-			\( -type f -a \( -name '*.pyc' -o -name '*.pyo' \) \) \
-		\) -exec rm -rf '{}' +; \
-	rm -f get-pip.py
+    \
+    savedAptMark="$(apt-mark showmanual)"; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends wget; \
+    \
+    wget -O get-pip.py "$PYTHON_GET_PIP_URL"; \
+    echo "$PYTHON_GET_PIP_SHA256 *get-pip.py" | sha256sum --check --strict -; \
+    \
+    apt-mark auto '.*' > /dev/null; \
+    [ -z "$savedAptMark" ] || apt-mark manual $savedAptMark; \
+    apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
+    rm -rf /var/lib/apt/lists/*; \
+    \
+    python get-pip.py \
+        --disable-pip-version-check \
+        --no-cache-dir \
+        "pip==$PYTHON_PIP_VERSION" \
+    ; \
+    pip --version; \
+    \
+    find /usr/local -depth \
+        \( \
+            \( -type d -a \( -name test -o -name tests -o -name idle_test \) \) \
+            -o \
+            \( -type f -a \( -name '*.pyc' -o -name '*.pyo' \) \) \
+        \) -exec rm -rf '{}' +; \
+    rm -f get-pip.py
 
 RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends \
     apt-utils \
@@ -171,7 +172,7 @@ RUN sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc
     apt-get -qq update && apt-get -qq install -y google-chrome-stable
 
 # Install chromedriver
-RUN wget -N https://chromedriver.storage.googleapis.com/99.0.4844.51/chromedriver_linux64.zip -P ~/ && \
+RUN wget -N https://chromedriver.storage.googleapis.com/116.0.5845.96/chromedriver_linux64.zip -P ~/ && \
     unzip ~/chromedriver_linux64.zip -d ~/ && \
     rm ~/chromedriver_linux64.zip && \
     mv -f ~/chromedriver /usr/bin/chromedriver && \
